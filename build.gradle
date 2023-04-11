@@ -1,0 +1,49 @@
+plugins {
+  id "com.microsoft.azure.azurefunctions" version "1.12.1"
+}
+apply plugin: 'java'
+apply plugin: "com.microsoft.azure.azurefunctions"
+
+group 'com.bala.azf'
+version '1.0-SNAPSHOT'
+
+ext.ballerinaLangVersion = "2201.4.1"
+
+//compileJava.options.encoding = "US-ASCII"
+//compileTestJava.options.encoding = "US-ASCII"
+
+dependencies {
+    implementation "org.ballerinalang:ballerina-lang:${ballerinaLangVersion}"
+    implementation "org.ballerinalang:docerina:${ballerinaLangVersion}"
+    implementation 'com.microsoft.azure.functions:azure-functions-java-library:2.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
+    testImplementation 'org.mockito:mockito-core:3.3.3'
+}
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+//compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang'
+        credentials {
+            username System.getenv("packageUser")
+            password System.getenv("packagePAT")
+        }
+    }
+}
+
+azurefunctions {
+    resourceGroup = 'java-functions-group'
+    appName = 'bala-serverless-1680869441761'
+    pricingTier = 'Consumption'
+    region = 'westus'
+    runtime {
+      os = 'linux'
+      javaVersion = '17'
+    }
+    localDebug = "transport=dt_socket,server=y,suspend=n,address=5005"
+}
